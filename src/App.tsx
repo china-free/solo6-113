@@ -7,12 +7,13 @@ export default function App() {
   const { batches, rootBatchIds } = useAuctionStore();
 
   const allBatches = Object.values(batches);
+  const leafBatches = allBatches.filter((b) => b.children.length === 0);
   const totalCount = allBatches.length;
-  const soldCount = allBatches.filter((b) => b.status === "sold").length;
-  const biddingCount = allBatches.filter((b) => b.status === "bidding").length;
-  const abnormalCount = allBatches.filter((b) => b.status === "abnormal").length;
-  const totalWeight = allBatches.reduce((s, b) => s + b.weightKg, 0);
-  const totalValue = allBatches
+  const soldCount = leafBatches.filter((b) => b.status === "sold").length;
+  const biddingCount = leafBatches.filter((b) => b.status === "bidding").length;
+  const abnormalCount = leafBatches.filter((b) => b.status === "abnormal").length;
+  const totalWeight = leafBatches.reduce((s, b) => s + b.weightKg, 0);
+  const totalValue = leafBatches
     .filter((b) => b.finalPricePerKg)
     .reduce((s, b) => s + (b.finalPricePerKg! * b.weightKg), 0);
   const rootCount = rootBatchIds.length;
